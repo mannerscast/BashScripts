@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# sysinfo_page - A script to produce an HTML file
+
+read -p "Drop the file: " FILENAME
+
+DIR=$(dirname "${FILENAME}")/
+cd "$DIR"
+cd ..
+UPLOAD=$(PWD)"/Uploads"
+
+mkdir -p "$UPLOAD"
+
+theFile="$UPLOAD""/$(basename "$FILENAME" .mov).mp4"
+
+cd /Users/tarmstrong/Documents/WebTest/
+
+title="RENDERS"
+timestamp=$( date +%m"/"%d"/"%Y )
+#DSKTP=$(ls "$UPLOAD")
+DSKTP=$(ls ~/Desktop/*.mov)
+BR="<br>"
+
+files=(*)
+
+echo "" > index.html
+
+cat >> index.html << _EOF_
+    <!doctype html>
+<meta http-equiv="Refresh" content="5">
+    <html>
+    <head>
+        <title>RENDERS</title>
+	<style>
+	h1 {
+	    font-family: Tahoma, Geneva, sans-serif; font-size: 40px;
+	   }
+	h2 {
+	    font-family: Tahoma, Geneva, sans-serif; font-size: 28px;
+	   }
+	p  {
+	    font-family: Tahoma, Geneva, sans-serif; font-size: 12px;
+	   }
+	</style>
+    </head>
+
+    <body>
+<img src="http://timelab-wp-media.s3-eu-west-1.amazonaws.com/satmission/2015/07/thin-header-1920x250.jpg"><br>
+    <h1>$title</h1>
+    <h2>$timestamp</h2>
+	<p>
+            <UL>
+_EOF_
+
+i=0
+for filename in ${DSKTP[@]}
+do
+echo "<b><li>$("basename" $filename)</li></b>" >> index.html
+done
+
+cat >> index.html << _EOF2_
+	    </UL>
+	</p>
+    </body>
+    </html>
+
+_EOF2_
