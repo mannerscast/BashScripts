@@ -1,0 +1,11 @@
+#!/bin/bash
+
+read -p "Drop the folder here: " theFolder
+
+cd "$theFolder"
+
+for file in *SDTW.mov
+do ffmpeg -i "$file" -ss 00:00:00 -vframes 1 $(basename "$file" .mov).png
+sips -s format JPEG $(basename "$file" .mov).png --out $(basename "$file" .mov).jpg
+rm -R $(basename "$file" .mov).png
+done
