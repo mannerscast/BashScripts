@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CWD=$PWD
-FILES=*.*
+FILES=*.*             
 FOLDERS=()
 MAKE=()
 
@@ -16,9 +16,7 @@ done
 # CLEAN UP FOLDERS LIST
 for ITEM in ${FOLDERS[@]}
 do
-        if [[ "$ITEM" =~ "UW" ]]; then
-                j=0 # DUMMY VARIABLE
-        else
+        if ! [[ "$ITEM" =~ "UW" ]]; then
                 BASENAME="${ITEM/_HD.jpg/}"
                 MAKE+=($BASENAME)
         fi
@@ -37,9 +35,6 @@ do
         do
                 if [[ "$ITEMS" =~ "$x" ]]; then
                         mv $ITEMS $x
-                else
-                        j=0
                 fi
         done
 done
-
