@@ -1,0 +1,45 @@
+#!/bin/bash
+
+CWD=$PWD
+FILES=*.*
+FOLDERS=()
+MAKE=()
+
+# ADD FOLDER NAMES TO ARRAY
+for NAME in $FILES
+do
+        if [[ "$NAME" =~ "_HD.jpg" ]]; then
+                FOLDERS+=($NAME)
+        fi
+done
+
+# CLEAN UP FOLDERS LIST
+for ITEM in ${FOLDERS[@]}
+do
+        if [[ "$ITEM" =~ "UW" ]]; then
+                j=0 # DUMMY VARIABLE
+        else
+                BASENAME="${ITEM/_HD.jpg/}"
+                MAKE+=($BASENAME)
+        fi
+done
+
+# CREATE MASTER FOLDERS
+for d in ${MAKE[@]}
+do
+        mkdir $d
+done
+
+# MATCH FILES AND PUT THEM IN FOLDERS
+for x in ${MAKE[@]}
+do
+        for ITEMS in $FILES
+        do
+                if [[ "$ITEMS" =~ "$x" ]]; then
+                        mv $ITEMS $x
+                else
+                        j=0
+                fi
+        done
+done
+
