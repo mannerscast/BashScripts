@@ -38,3 +38,120 @@ do
                 fi
         done
 done
+
+
+# !/bin/bash
+
+# IFS=$'\n'
+# CWD=$PWD
+# FILES="*.*"
+
+# #META=$(mdls -name kMDItemPixelWidth $FILE)
+# #WIDTH=${META/kMDItemPixelWidth = }
+# FAIL=()
+# PASS=()
+# HD=()
+# HD_FIN=()
+# SD=()
+# SD_FIN=()
+# UW_HD=()
+# UW_SD=()
+
+# # POPULATE HD ARRAY
+# for FILE in $FILES
+# do
+#         if [[ "$FILE" =~ "HD"  ]]; then
+#                 HD+=("$FILE")
+#         fi
+# done
+
+# # POPULATE SD ARRAY
+# for FILE in $FILES
+# do
+#         if [[ "$FILE" =~ "SD"  ]]; then
+#                 SD+=("$FILE")
+#         fi
+# done
+# i=0
+# # POPULATE UW_HD ARRAY
+# for FILE in ${HD[@]}
+# do
+#         if [[ "$FILE" =~ "UW"  ]]; then
+#                 UW_HD+=("$FILE")
+#         else
+#                 HD_FIN+=("$FILE")
+#         fi
+# done
+
+# # POPULATE UW_SD ARRAY
+# for FILE in ${SD[@]}
+# do
+#         if [[ "$FILE" =~ "UW"  ]]; then
+#                 UW_SD+=("$FILE")
+#         else
+#                 SD_FIN+=("$FILE")
+#         fi
+# done
+
+# for FILE in ${SD_FIN[@]}
+# do
+# META=$(mdls -name kMDItemPixelWidth "$FILE")
+# WIDTH=${META/kMDItemPixelWidth = }
+#         if [[ "$WIDTH" =~ "1440"  ]]; then
+#                 PASS+=("$FILE")
+#         else
+#                 FAIL+=("$FILE")
+#         fi
+# done
+
+# for FILE in ${HD_FIN[@]}
+# do
+# META=$(mdls -name kMDItemPixelWidth "$FILE")
+# WIDTH=${META/kMDItemPixelWidth = }
+#         if [[ "$WIDTH" =~ "1920"  ]]; then
+#                 PASS+=("$FILE")
+#         else
+#                 FAIL+=("$FILE")
+#         fi
+# done
+
+# for FILE in ${UW_SD[@]}
+# do
+# META=$(mdls -name kMDItemPixelWidth "$FILE")
+# WIDTH=${META/kMDItemPixelWidth = }
+#         if [[ "$WIDTH" =~ "1920"  ]]; then
+#                 PASS+=("$FILE")
+#         else
+#                 FAIL+=("$FILE")
+#         fi
+# done
+
+
+# for FILE in ${UW_HD[@]}
+# do
+# META=$(mdls -name kMDItemPixelWidth "$FILE")
+# WIDTH=${META/kMDItemPixeYlWidth = }
+#         if [[ "$WIDTH" =~ "3840"  ]]; then
+#                 PASS+=("$FILE")
+#         else
+#                 FAIL+=("$FILE")
+#         fi
+# done
+
+# pList() {
+# arr=${@}
+# for ITEM in $arr;
+# do
+# echo $ITEM
+# done
+# }
+
+# echo "PASSED"
+# pList ${PASS[@]}
+# echo "-----------------"
+
+# echo "FAILED"
+# pList ${FAIL[@]}
+# echo
+# echo
+
