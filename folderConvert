@@ -1,0 +1,11 @@
+#!/bin/bash
+
+curDir=$PWD
+FILES=*.mov
+
+for filename in $FILES
+do
+    theFile=$(basename "$filename" .mov)-h264.mov
+    ffmpeg -i "$filename" -c:v libx264 -pix_fmt yuv420p "$theFile"
+done
+say "The files are done"
