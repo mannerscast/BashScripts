@@ -1,0 +1,38 @@
+#!/bin/bash
+
+FILENAME=${1?Error: no file given}
+PNG=${FILENAME/mov}png
+JPEG=${FILENAME/mov}jpg
+open $FILENAME
+
+#osascript -e 'tell app "System Events" to display dialog "Pick thumbnail for : '$FILENAME' and hit contiue." buttons {"Continue"} default button "Continue"'
+
+read -p "Press enter after choosing the thumbnail frame." answer
+
+get_Thumb_Time() {
+
+theFile=$1
+
+TIME=$(osascript <<-EOD
+#tell application "QuickTime Player"
+#       activate 
+#end tell
+
+#tell app "System Events" to display dialog "Pick thumbnail for : '$theFile' and hit contiue." buttons {"Continue"} default button "Continue"
+
+tell application "QuickTime Player"
+		activate
+		set thumbnailTime to current time of document 1
+		close document 1
+end tell
+
+get thumbnailTime
+
+EOD
+)
+
+ffmpeg -y -ss $TIME -i $FILENAME -q:v 1 -vframes 1 -tune animation $PNG && cp $PNG $JPEG && rm $PNG
+
+}
+
+get_Thumb_Time $FILENAME
