@@ -8,12 +8,12 @@ mkdir -p "$UPLOAD"
 theFile="$UPLOAD""/$(basename "$FILENAME" .mov).mp4"
 ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
 
-echo
-echo "-----------------------------------------------------"
-echo "The file is: " "$FILENAME"
-echo "The directory is:" "$PWD"
-echo "The Uploads folder is: " "$UPLOAD"
-echo "-----------------------------------------------------"
-echo
+# echo
+# echo "-----------------------------------------------------"
+# echo "The file is: " "$FILENAME"
+# echo "The directory is:" "$PWD"
+# echo "The Uploads folder is: " "$UPLOAD"
+# echo "-----------------------------------------------------"
+# echo
 
 open "$UPLOAD"
