@@ -51,9 +51,8 @@ done
 
 for FILE in ${SD_FIN[@]}
 do
-META=$(mdls -name kMDItemPixelWidth "$FILE")
-WIDTH=${META/kMDItemPixelWidth = }
-        if [[ "$WIDTH" =~ "1440"  ]]; then
+SIZE=$(ffprobe -v fatal -select_streams v:0 -show_entries stream=height,width -of csv=s=x:p=0 "$FILE")
+        if [[ "$SIZE" =~ "1440x1080"  ]]; then
                 PASS+=("$FILE")
         else
                 FAIL+=("$FILE")
@@ -62,20 +61,20 @@ done
 
 for FILE in ${HD_FIN[@]}
 do
-META=$(mdls -name kMDItemPixelWidth "$FILE")
-WIDTH=${META/kMDItemPixelWidth = }
-        if [[ "$WIDTH" =~ "1920"  ]]; then
+SIZE=$(ffprobe -v fatal -select_streams v:0 -show_entries stream=height,width -of csv=s=x:p=0 "$FILE")
+        if [[ "$SIZE" =~ "1920x1080"  ]]; then
                 PASS+=("$FILE")
         else
                 FAIL+=("$FILE")
         fi
 done
 
+
+
 for FILE in ${UW_SD[@]}
 do
-META=$(mdls -name kMDItemPixelWidth "$FILE")
-WIDTH=${META/kMDItemPixelWidth = }
-        if [[ "$WIDTH" =~ "1920"  ]]; then
+SIZE=$(ffprobe -v fatal -select_streams v:0 -show_entries stream=height,width -of csv=s=x:p=0 "$FILE")
+        if [[ "$SIZE" =~ "1920x480"  ]]; then
                 PASS+=("$FILE")
         else
                 FAIL+=("$FILE")
@@ -85,9 +84,8 @@ done
 
 for FILE in ${UW_HD[@]}
 do
-META=$(mdls -name kMDItemPixelWidth "$FILE")
-WIDTH=${META/kMDItemPixeYlWidth = }
-        if [[ "$WIDTH" =~ "3840"  ]]; then
+SIZE=$(ffprobe -v fatal -select_streams v:0 -show_entries stream=height,width -of csv=s=x:p=0 "$FILE")
+        if [[ "$SIZE" =~ "3840x720"  ]]; then
                 PASS+=("$FILE")
         else
                 FAIL+=("$FILE")
