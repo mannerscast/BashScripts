@@ -1,9 +1,10 @@
 #!/bin/bash
 
-FILENAME=${1?Error: no file given}
-PNG=${FILENAME/mov}png
-JPEG=${FILENAME/mov}jpg
-open $FILENAME
+THEFILES=( "$@" )
+
+#Open the first file in QuickTime and pasue for USER to choose thumbnail time
+FIRSTFILE="${THEFILES[0]}" 
+open $FIRSTFILE
 
 read -p "Press enter after choosing the thumbnail frame." answer
 
@@ -11,7 +12,7 @@ get_Thumb_Time() {
 
 theFile=$1
 
-TIME=$(osascript <<-EOD
+TIME=$(osascript <<-EOF
 
 tell application "QuickTime Player"
 		activate
@@ -21,10 +22,20 @@ end tell
 
 get thumbnailTime
 
-EOD
+EOF
 )
-# OUTPUT THE PNG THUMB / CONVERT TO JPG / DELETE PNG
-ffmpeg -y -ss $TIME -i $FILENAME -q:v 1 -vframes 1 -tune animation $PNG && cp $PNG $JPEG && rm $PNG
+
 }
 
-get_Thumb_Time $FILENAME
+get_Thumb_Time $FIRSTFILE
+
+for FILE in "${THEFILES[@]}"
+ do
+ 
+ 	PNG=${FILE/mov}png
+ 	JPEG=${FILE/mov}jpg
+
+	# OUTPUT THE PNG THUMB / CONVERT TO JPG / DELETE PNG
+	ffmpeg -loglevel quiet -y -ss $TIME -i $FILE -q:v 1 -vframes 1 -tune animation $PNG
+	sips -s format jpeg "$PNG" --out "$JPEG" && rm $PNG
+done
