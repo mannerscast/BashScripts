@@ -1,12 +1,16 @@
 #!/bin/bash
 
-FILENAME=${1?Error: no file given}
+#FILENAME=${1?Error: no file given}
 UPLOAD="$PWD/../Uploads"
 
-mkdir -p "$UPLOAD"
+FILES=( "$@" )
 
-theFile="$UPLOAD""/$(basename "$FILENAME" .mov).mp4"
-ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
+mkdir -p "$UPLOAD"
+for FILENAME in ${FILES[@]}
+do
+    theFile="$UPLOAD""/$(basename "$FILENAME" .mov).mp4"
+    ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
+done
 
 # echo
 # echo "-----------------------------------------------------"
