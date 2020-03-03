@@ -18,8 +18,6 @@ read -p "Press enter after choosing the thumbnail frame." answer
 
 get_Thumb_Time() {
 
-# theFile=$1
-
 TIME=$(osascript <<-EOF
 
 tell application "QuickTime Player"
@@ -31,8 +29,7 @@ end tell
 get thumbnailTime
 
 EOF
-)
-
+    )
 }
 
 get_Thumb_Time $CD_HD
