@@ -16,6 +16,9 @@ open $CD_HD
 
 read -p "Press enter after choosing the thumbnail frame." answer
 
+CD_FOLDER="$PWD/../"$CD_NAME"Upload"
+mkdir -p "$CD_FOLDER"
+
 get_Thumb_Time() {
 
 TIME=$(osascript <<-EOF
@@ -35,17 +38,14 @@ EOF
 get_Thumb_Time $CD_HD
 
 PNG=${CD_HD/mov}png
-JPEG=${CD_HD/mov}jpg
+JPEG="$CD_FOLDER"/"${CD_HD/mov}jpg"
 
-# OUTPUT THE PNG THUMB / CONVERT TO JPG / DELETE PNG
+#OUTPUT THE PNG THUMB / CONVERT TO JPG / DELETE PNG
 ffmpeg -loglevel quiet -y -ss $TIME -i $CD_HD -q:v 1 -vframes 1 -tune animation $PNG
 sips -s format jpeg "$PNG" --out "$JPEG" && rm $PNG
 
-CD_FOLDER="$PWD/../"$CD_NAME"Upload"
-
-mkdir -p "$CD_FOLDER"
 for FILENAME in ${CD_CONVERT[@]}
 do
-    theFile="$CD_FOLDER""/$(basename "$FILENAME" .mov).mp4"
+    theFile="$CD_FOLDER"/"$FILENAME"
     ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
 done
