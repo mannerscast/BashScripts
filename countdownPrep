@@ -49,3 +49,5 @@ do
     theFile="$CD_FOLDER"/"$FILENAME"
     ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
 done
+
+open -R $theFile
