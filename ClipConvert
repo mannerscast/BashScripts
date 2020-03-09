@@ -20,4 +20,4 @@ done
 # echo "-----------------------------------------------------"
 # echo
 
-open "$UPLOAD"
+open -R $theFile
