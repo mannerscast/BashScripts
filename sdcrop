@@ -8,8 +8,8 @@ FILES=( "$@" )
 mkdir -p "$UPLOAD"
 for FILENAME in ${FILES[@]}
 do
-    theFile="$UPLOAD""/$(basename "$FILENAME" .mov).mp4"
-    ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
+    theFile="$(basename "$FILENAME" _HD.mov)_SD.mov"
+    ffmpeg -y -i "$FILENAME" -filter:v crop=in_w/\(4/3\):in_h -c:v copy -pix_fmt yuv420p "$theFile"
 done
 
 # echo
