@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# This is a script for encoding Motion Retitles.
+
+#FILENAME=${1?Error: no file given}
+UPLOAD="$PWD/../Uploads"
+HD=()
+SD=()
+FILES=( "$@" )
+
+mkdir -p "$UPLOAD"
+
+
+for FILENAME in ${FILES[@]}
+do
+DAR=$(ffprobe -v fatal -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1 "$FILENAME")
+        if [[ "$DAR" =~ "4:3"  ]]; then
+                SD+=("$FILENAME")
+        else
+                HD+=("$FILENAME")
+        fi
+done
+
+# echo ${SD[@]}
+# echo "------------------"
+# echo ${HD[@]}
+
+for HDFILES in ${HD[@]}
+do
+    theFile="$UPLOAD""/$(basename "$HDFILES" .mov).mp4"
+    theMPEG="$UPLOAD""/$(basename "$HDFILES" .mov).mpg"
+    
+    ffmpeg -y -i "$HDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" -vf "scale=iw*.66666667:ih*.66666667" -pix_fmt yuv420p -b:v 8500k -minrate 8500k -maxrate 10500k -bufsize 25000k "$theMPEG"
+done
+
+for SDFILES in ${SD[@]}
+do
+    theFile="$UPLOAD""/$(basename "$SDFILES" .mov).mp4"
+    theMPEG="$UPLOAD""/$(basename "$SDFILES" .mov).mpg"
+    
+    ffmpeg -y -i "$SDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" -vf "scale=640:480" -pix_fmt yuv420p -b:v 4500k -minrate 4500k -maxrate 8500k -bufsize 15000k "$theMPEG"
+done
+
+# Open the ecnlosing folder
+open -R $theFile
