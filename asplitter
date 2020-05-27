@@ -13,17 +13,19 @@ if [ -z "$IN" ]; then
     exit 1
 fi
 
-echo "Determining split points..." >& 2
+echo "Determining Tracks..." >& 2
 
 ENDS=$(
-    ffmpeg  -v warning -i "$IN" -af silencedetect=-65dB:d=0.3,ametadata=mode=print:file=-:key=lavfi.silence_start  -vn -sn -f wav -y /dev/null \
+    ffmpeg  -v warning -i "$IN" -af silencedetect=-65dB:d=0.5,ametadata=mode=print:file=-:key=lavfi.silence_start  -vn -sn -f wav -y /dev/null \
     | grep lavfi.silence_start= \
     | cut -f 2-2 -d = \
 
 )
+echo
+echo "Finding silence..." >& 2
 
 STARTS=$(
-    ffmpeg  -v warning -i "$IN" -af silencedetect=-65dB:d=0.3,ametadata=mode=print:file=-:key=lavfi.silence_end  -vn -sn -f wav -y /dev/null \
+    ffmpeg  -v warning -i "$IN" -af silencedetect=-65dB:d=0.5,ametadata=mode=print:file=-:key=lavfi.silence_end  -vn -sn -f wav -y /dev/null \
     | grep lavfi.silence_end= \
     | cut -f 2-2 -d = \
 
@@ -43,11 +45,13 @@ for (( j=0; j<=$(( $total -1 )); j++ ))
         do 
         s=${start_array[$j]}
         e=${end_array[$j]}
-        echo -n "Start: $s "
-        echo -n "End: $e "
+        #echo -n "Start: $s "
+        #echo -n "End: $e "
         new_duration=`echo $e - $s | bc -l`
-        echo "Duration= $new_duration"
-        ffmpeg -y -ss $s -i "$IN" -t $new_duration -c copy -map 0 $(basename "$IN" .m4a)-$j.m4a
+        #echo "Duration= $new_duration"
+        ffmpeg -loglevel quiet -y -ss $s -i "$IN" -t $new_duration -c copy -map 0 $(basename "$IN" .m4a)-$j.m4a
+        echo -n "#"
         done
-
+echo
+echo
 echo "Audio has been split!"
