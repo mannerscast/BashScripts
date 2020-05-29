@@ -1,0 +1,33 @@
+#!/bin/bash
+
+IN=$1
+TAG=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
+
+OUTPUT="../Tagged_Movies""/$(basename "$1" .mp4)-tagged.mov"
+
+echo $EXT
+
+#Build File List
+LINE=$(echo file \'$IN\' file \'$TAG\')
+
+# define the movie array  
+
+movie=($1)   
+
+#define end card array  
+
+endcard=($TAG)  
+
+# Use for loop  
+# get total subscripts in an array  
+
+total=${#movie[*]}  
+
+for (( i=0; i<=$(( $total -1 )); i++ ))  
+do  
+echo "Processing ..."
+ffmpeg -loglevel quiet -i ${movie[0]} -i ${endcard[0]} -y -filter_complex '[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+
+done
+
+echo "Processing Complete!"
