@@ -25,9 +25,12 @@ total=${#movie[*]}
 
 for (( i=0; i<=$(( $total -1 )); i++ ))  
 do  
-echo "Processing ..."
+echo
+echo "Processing ..." ${movie[0]}
 ffmpeg -loglevel quiet -i ${movie[0]} -i ${endcard[0]} -y -filter_complex '[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
 
 done
 
+echo
 echo "Processing Complete!"
+echo
