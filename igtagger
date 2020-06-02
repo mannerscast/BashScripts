@@ -1,32 +1,23 @@
 #!/bin/bash
 
-IN=( "$@" )
-# TAG=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
-
+IN=( "$@" ) #Take in a group of files
 default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
-
-read -p "Logo tag to use [Default is Igniter Logo] > " TAG
-
+read -p "Logo tag to use [Default is Igniter Logo] > " TAG #Ask if there is a different logo tag to use
 TAG=${TAG:-$default_tag}
 
 OUTPUT="../Tagged_Movies""/$(basename "$1" .mp4)-tagged.mov"
-
-echo $EXT
 
 #Build File List
 LINE=$(echo file \'$IN\' file \'$TAG\')
 
 # define the movie array  
-
 movie=($1)   
 
 #define end card array  
-
 endcard=($TAG)  
 
 # Use for loop  
 # get total subscripts in an array  
-
 total=${#movie[*]}  
 
 for (( i=0; i<=$(( $total -1 )); i++ ))  
