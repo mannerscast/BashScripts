@@ -1,33 +1,68 @@
 #!/bin/bash
 
-IN=( "$@" ) #Take in a group of files
+IN=( "$@" )
+# TAG=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
+
 default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
-read -p "Logo tag to use [Default is Igniter Logo] > " TAG #Ask if there is a different logo tag to use
+
+read -p "Logo tag to use [Default is Igniter Logo] > " TAG
+
 TAG=${TAG:-$default_tag}
+NO_AUDIO=()
+WRONG_SIZE=()
 
 OUTPUT="../Tagged_Movies""/$(basename "$1" .mp4)-tagged.mov"
+
+echo
+echo "Checking for audio..." 
 
 #Build File List
 LINE=$(echo file \'$IN\' file \'$TAG\')
 
 # define the movie array  
-movie=($1)   
+
+inputs=($IN)   
 
 #define end card array  
+
 endcard=($TAG)  
 
 # Use for loop  
 # get total subscripts in an array  
+
+for FILE in ${IN[@]}
+do
+SIZE=$(ffprobe -v fatal -select_streams a:0 -show_entries stream=codec_name -of csv=s=x:p=0 "$FILE")
+        if [[ "$SIZE" =~ "aac"  ]]; then
+                
+                movie+=("$FILE")
+        else
+                NO_AUDIO+=("$FILE")
+        fi
+done
+
 total=${#movie[*]}  
 
+echo "CONVERTING $total FILES"
+echo
+
 for (( i=0; i<=$(( $total -1 )); i++ ))  
+
     do  
-        echo
-        echo "Processing ..." ${movie[0]}
+        echo "Processing ..." ${movie[i]}
         # -loglevel quiet
-        ffmpeg -i ${movie[0]}  -i ${endcard[0]} -y -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        ffmpeg -loglevel quiet -i ${movie[i]}  -i ${endcard[i]} -y -dn -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ${movie[0]}
     done
 
 echo
 echo "Processing Complete!"
 echo
+
+# echo "FAILED: "${NO_AUDIO[@]}
+
+# ALERT CODE
+# osascript -e 'tell app "System Events" to display dialog "The File: ${movie[i]}"'
+
+# FFPROBE Check for audio stream
+# ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1
