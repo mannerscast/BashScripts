@@ -59,10 +59,11 @@ echo
 echo "Processing Complete!"
 echo
 
-# echo "FAILED: "${NO_AUDIO[@]}
+echo "FAILED: "${NO_AUDIO[@]}
+echo
 
 # ALERT CODE
-# osascript -e 'tell app "System Events" to display dialog "The File: ${movie[i]}"'
+# osascript -e 'tell app "System Events" to display dialog "FAILED: ${NO_AUDIO[@]}"'
 
 # FFPROBE Check for audio stream
 # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1
