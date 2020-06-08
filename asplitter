@@ -16,7 +16,7 @@ fi
 echo "Determining Tracks..." >& 2
 
 ENDS=$(
-    ffmpeg  -v warning -i "$IN" -af silencedetect=-65dB:d=0.35,ametadata=mode=print:file=-:key=lavfi.silence_start  -vn -sn -f wav -y /dev/null \
+    ffmpeg  -v warning -i "$IN" -af silencedetect=-55dB:d=0.35,ametadata=mode=print:file=-:key=lavfi.silence_start  -vn -sn -f wav -y /dev/null \
     | grep lavfi.silence_start= \
     | cut -f 2-2 -d = \
 
@@ -25,7 +25,7 @@ echo
 echo "Finding silence..." >& 2
 
 STARTS=$(
-    ffmpeg  -v warning -i "$IN" -af silencedetect=-65dB:d=0.35,ametadata=mode=print:file=-:key=lavfi.silence_end  -vn -sn -f wav -y /dev/null \
+    ffmpeg  -v warning -i "$IN" -af silencedetect=-55dB:d=0.35,ametadata=mode=print:file=-:key=lavfi.silence_end  -vn -sn -f wav -y /dev/null \
     | grep lavfi.silence_end= \
     | cut -f 2-2 -d = \
 
@@ -55,3 +55,4 @@ for (( j=0; j<=$(( $total -1 )); j++ ))
 echo
 echo
 echo "Audio has been split!"
+
