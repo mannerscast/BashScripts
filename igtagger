@@ -11,7 +11,7 @@ TAG=${TAG:-$default_tag}
 NO_AUDIO=()
 WRONG_SIZE=()
 
-OUTPUT="../Tagged_Movies""/$(basename "$1" .mp4)-tagged.mov"
+OUTPUT="../_Tagged""/$(basename "$1" .mp4)-tagged.mov"
 
 echo
 echo "Checking for audio..." 
@@ -33,7 +33,8 @@ endcard=($TAG)
 for FILE in ${IN[@]}
 do
 SIZE=$(ffprobe -v fatal -select_streams a:0 -show_entries stream=codec_name -of csv=s=x:p=0 "$FILE")
-        if [[ "$SIZE" =~ "aac"  ]]; then
+# echo $SIZE
+        if [[ "$SIZE" =~ "pcm_s16le"  ]]; then
                 
                 movie+=("$FILE")
         else
@@ -47,11 +48,12 @@ echo "CONVERTING $total FILES"
 echo
 
 for (( i=0; i<=$(( $total -1 )); i++ ))  
-
     do  
+        OUTPUT="../Tagged_Movies""/$(basename "${movie[i]}" .mov)-tagged.mov"
         echo "Processing ..." ${movie[i]}
         # -loglevel quiet
-        ffmpeg -loglevel quiet -i ${movie[i]}  -i ${endcard[i]} -y -dn -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        ffmpeg -y -i ${movie[i]} -i ${endcard} -dn -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        echo "Complete:" $OUTPUT
         # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ${movie[0]}
     done
 
