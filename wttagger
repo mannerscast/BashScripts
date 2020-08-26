@@ -31,7 +31,7 @@ for FILE in ${IN[@]}
 do
 SIZE=$(ffprobe -v fatal -select_streams a:0 -show_entries stream=codec_name -of csv=s=x:p=0 "$FILE")
 # echo $SIZE
-        if [[ "$SIZE" =~ "pcm_s16le"  ]]; then
+        if [[ "$SIZE" != ""  ]]; then
                 
                 movie+=("$FILE")
         else
