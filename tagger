@@ -4,7 +4,7 @@ IN=( "$@" )
 START_TIME=`date +%s`
 THE_PATH=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets"
 IG_TAG=$"Igniter-Tag.mov"
-WT_TAG=$"Worship_Together_Tag_HD.mov"
+WT_TAG=$"Worship_Together_Tag-Fade_HD.mov"
 WTK_TAG=$"WT_Kids_Tag_HD.mov"
 default_tag="$THE_PATH/$IG_TAG"
 
@@ -57,7 +57,8 @@ for (( i=0; i<=$(( $total -1 )); i++ ))
         OUTPUT="../_Tagged""/$(basename "${movie[i]}" .mov)-tagged.mov"
         echo "Processing ..." ${movie[i]}
         # -loglevel quiet
-        ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -vsync 0 -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        # ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -vsync 0 -filter_complex "xfade=transition=fade:duration=1:offset=$OFFSET" -c:v libx264 -pix_fmt yuv420p $OUTPUT
         echo "Complete:" $OUTPUT
         # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ${movie[0]}
     done
