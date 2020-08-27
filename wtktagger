@@ -67,9 +67,3 @@ END_TIME=`date +%s`
 ((ELAPSED=$END_TIME-$START_TIME))
 printf 'Elapsed Time %dh:%dm:%ds\n' $(($ELAPSED/3600)) $(($ELAPSED%3600/60)) $(($ELAPSED%60))
 echo
-
-# ALERT CODE
-# osascript -e 'tell app "System Events" to display dialog "FAILED: ${NO_AUDIO[@]}"'
-
-# FFPROBE Check for audio stream
-# ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1
