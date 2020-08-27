@@ -2,13 +2,23 @@
 
 IN=( "$@" )
 START_TIME=`date +%s`
-default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/WT_Kids_Tag_HD.mov"
+THE_PATH=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets"
+IG_TAG=$"Igniter-Tag.mov"
+WT_TAG=$"Worship_Together_Tag_HD.mov"
+WTK_TAG=$"WT_Kids_Tag_HD.mov"
+default_tag="$THE_PATH/$IG_TAG"
 
-read -p "Logo tag to use [Default is Worship Together Kids Logo] > " TAG
+PS3="Enter a number: "
 
-TAG=${TAG:-$default_tag}
+select logo_tag in $IG_TAG $WT_TAG $WTK_TAG
+do
+    TAG="$THE_PATH/$logo_tag"
+    break
+done
 NO_AUDIO=()
 WRONG_SIZE=()
+
+OUTPUT="../_Tagged""/$(basename "$1" .mov)-tagged.mov"
 
 echo
 echo "Checking for audio..." 
@@ -17,11 +27,9 @@ echo "Checking for audio..."
 LINE=$(echo file \'$IN\' file \'$TAG\')
 
 # define the movie array  
-
 inputs=($IN)   
 
 #define end card array  
-
 endcard=($TAG)  
 
 # Use for loop  
@@ -41,7 +49,7 @@ done
 
 total=${#movie[*]}  
 
-echo "CONVERTING $total FILES"
+echo "CONVERTING $total FILE(S)"
 echo
 
 for (( i=0; i<=$(( $total -1 )); i++ ))  
@@ -67,9 +75,3 @@ END_TIME=`date +%s`
 ((ELAPSED=$END_TIME-$START_TIME))
 printf 'Elapsed Time %dh:%dm:%ds\n' $(($ELAPSED/3600)) $(($ELAPSED%3600/60)) $(($ELAPSED%60))
 echo
-
-# ALERT CODE
-# osascript -e 'tell app "System Events" to display dialog "FAILED: ${NO_AUDIO[@]}"'
-
-# FFPROBE Check for audio stream
-# ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1
