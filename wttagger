@@ -2,7 +2,7 @@
 
 IN=( "$@" )
 
-default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/U"
+default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Worship_Together_Tag_HD.mov"
 
 read -p "Logo tag to use [Default is Worship Together Logo] > " TAG
 
