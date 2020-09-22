@@ -3,7 +3,7 @@
 IN=( "$@" )
 START_TIME=`date +%s`
 THE_PATH=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets"
-IG_TAG=$"Igniter-Tag.mov"
+IG_TAG=$"Igniter_TV_Logo_Tag.mov"
 WT_TAG=$"Worship_Together_Tag-Fade_HD.mov"
 WTK_TAG=$"WT_Kids_Tag_HD.mov"
 default_tag="$THE_PATH/$IG_TAG"
