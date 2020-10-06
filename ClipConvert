@@ -9,7 +9,7 @@ mkdir -p "$UPLOAD"
 for FILENAME in ${FILES[@]}
 do
     theFile="$UPLOAD""/$(basename "$FILENAME" .mov).mp4"
-    ffmpeg -y -i "$FILENAME" -c:v libx264 -pix_fmt yuv420p "$theFile"
+    ffmpeg -y -i "$FILENAME" -c:v libx264 -x264-params "nal-hrd=cbr" -b:v 3M -minrate 3M -maxrate 3M -bufsize 5M -c:a aac -b:a 192k -pix_fmt yuv420p "$theFile"
 done
 
 # echo
