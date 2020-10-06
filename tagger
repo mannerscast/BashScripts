@@ -58,7 +58,7 @@ for (( i=0; i<=$(( $total -1 )); i++ ))
         echo "Processing ..." ${movie[i]}
         # -loglevel quiet
         # ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -vsync 0 -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
-        ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -vsync 0 -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -preset slow -crf 18 -c:a aac -b:a 192k -pix_fmt yuv420p $OUTPUT
+        ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -vsync 0 -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -x264-params "nal-hrd=cbr" -b:v 3M -minrate 3M -maxrate 3M -bufsize 5M -c:a aac -b:a 192k -pix_fmt yuv420p $OUTPUT
         # ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -vsync 0 -filter_complex "xfade=transition=fade:duration=1:offset=$OFFSET" -c:v libx264 -pix_fmt yuv420p $OUTPUT
         echo "Complete:" $OUTPUT
         # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ${movie[0]}
