@@ -1,11 +1,9 @@
 #!/bin/bash
 
 #FILENAME=${1?Error: no file given}
-UPLOAD="$PWD/../Uploads"
 
 FILES=( "$@" )
 
-mkdir -p "$UPLOAD"
 for FILENAME in ${FILES[@]}
 do
     theFile="$(basename "$FILENAME" _HD.mov)_SD.mov"
