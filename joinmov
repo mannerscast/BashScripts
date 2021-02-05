@@ -13,5 +13,4 @@ do
 done
 
 
-
 open -R $PWD
