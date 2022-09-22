@@ -1,0 +1,160 @@
+#!/bin/bash
+#
+#########################################
+# This script unzips a Dummy PPTX WIDE  #
+# replaces the images with New Images   #
+# and ZIPS a new PPTX with a User       #
+# provided name.                        #
+#########################################
+#
+#clear
+
+#Read the file input for the action
+FILENAME=${1?Error: NO FILE GIVEN}
+
+FILES=( "$@" )
+WIDE=()
+STD=()
+MAINDIR="$(dirname "$(pwd)")"
+CWD=$PWD
+IDIR=${CWD}/ppt/media
+RELSDIR=${CWD}/ppt/slideLayouts/_rels
+MASTER_RELS=${CWD}/ppt/slideMasters/_rels/
+IMAGES=()
+NewImagesDIR=../NewImages
+PPTFOLDER="$(basename "$FILENAME" .ppt)"
+
+echo
+echo "[------BEGIN PROCESSING------]"
+echo
+
+# Unzip the input file and move it out of the folder
+for FILENAME in ${FILES[@]}
+do
+    unzip -q -o $FILENAME
+    mv $FILENAME ..
+    
+    echo "$FILENAME was unzipped and moved."
+    echo
+    ZIPDIR=$PWD
+    
+    #zip -r $FILENAME . *
+done
+
+cd $NewImagesDIR
+NewImagesDIR=$PWD
+NewImages=( *.* )
+
+IFS="\ "
+for JPG in "${NewImages[@]}"
+do
+    mv "$JPG" "${JPG//[[:space:]]}"
+done
+NewImages=( *.* )
+#read -p "CTL+C to stop or RETURN to continue"
+
+#read -p "ARE THOSE THE IMAGES?  >>CTL+C to stop or RETURN to continue<<"
+
+#Add correct images to array
+for FILE in "${NewImages[@]}"
+do
+        if [[ "$FILE" =~ "WIDE"  ]]; then
+            if [[ "$FILE" =~ "Alt1"  ]]; then
+             cp "$FILE" "$IDIR/image4.jpg"
+            fi
+            if [[ "$FILE" =~ "Alt2"  ]]; then
+             cp "$FILE" "$IDIR/image5.jpg"
+            fi
+            if [[ "$FILE" =~ "TT1"  ]]; then
+             cp "$FILE" "$IDIR/image1.jpg"
+            fi
+            if [[ "$FILE" =~ "TT2"  ]]; then
+             cp "$FILE" "$IDIR/image2.jpg"
+            fi
+            if [[ "$FILE" =~ "TT3"  ]]; then
+             cp "$FILE" "$IDIR/image3.jpg"
+            fi
+            #if [[ "$FILE" =~ "OTHER FILE"  ]]; then
+            # cp "$FILE" "$IDIR"
+            #fi                   
+        fi
+done
+
+cd "$RELSDIR"
+
+#echo
+
+echo "REPLACED: PPT IMAGES"
+
+#Change slideLayout Rels to correct image numbering
+RELS=(*.*)
+for TXT in ${RELS[@]}
+do
+        if [[ "$TXT" =~ "slideLayout"  ]]; then
+        
+            if [[ "$TXT" =~ "1"  ]]; then
+            sed -i "" 's/image\([0-9]*\)\./image1\./g' $TXT
+            #echo "EDITED: $TXT"
+            fi
+            if [[ "$TXT" =~ "2"  ]]; then
+            sed -i "" 's/image\([0-9]*\)\./image2\./g' $TXT
+            #echo "EDITED: $TXT"
+            fi
+            if [[ "$TXT" =~ "3"  ]]; then
+            sed -i "" 's/image\([0-9]*\)\./image3\./g' $TXT
+            #echo "EDITED: $TXT"
+            fi
+            if [[ "$TXT" =~ "4"  ]]; then
+            sed -i "" 's/image\([0-9]*\)\./image4\./g' $TXT
+            #echo "EDITED: $TXT"
+            fi
+            if [[ "$TXT" =~ "5"  ]]; then
+            sed -i "" 's/image\([0-9]*\)\./image5\./g' $TXT
+            #echo "EDITED: $TXT"
+            fi
+            if [[ "$TXT" =~ "6"  ]]; then
+            #echo "DID NOT EDIT $TXT"
+            echo
+            fi                   
+        fi
+done
+
+echo "EDITED: slideLayouts 1-5"
+echo
+# Update slideMaster Rels
+cd "$MASTER_RELS"
+MSTR=slideMaster1.xml.rels
+#open $MSTR
+#read -p "CTL+C to stop or RETURN to continue"
+sed -i "" 's/image\([0-9]*\)\./image5\./g' $MSTR
+            echo "EDITED: $MSTR"
+echo
+echo
+read -p "INPUT: What is the name of the new PPTX? " pptName
+
+echo
+
+cd "$ZIPDIR"
+#Create and move PPTX file
+echo "ZIPPING: $pptName.pptx"
+echo
+zip -r -q $pptName.pptx "$ZIPDIR"/. * && mv $pptName.pptx ..
+
+echo "ZIPPED AND MOVED: $pptName.pptx"
+echo
+
+#Remove leftover files
+FILE_CHECK=[Content_Types].xml
+
+if [ -f "$FILE_CHECK" ]; then
+    #echo "$FILE_CHECK exists."
+    rm "$FILE_CHECK"
+    rm -R _rels/
+    rm -R docProps/
+    rm -R ppt/
+    echo "REMOVED: Leftover Files"
+fi
+
+echo
+echo "[------PROCESSING...COMPLETE------]"
+echo
