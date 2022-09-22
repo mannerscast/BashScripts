@@ -1,35 +1,3 @@
 #!/bin/bash
 #
 
-CWD=$PWD
-IDIR=${CWD}/ppt/media
-RELSDIR=${CWD}/ppt/slideLayouts/_rels
-MASTER_RELS=${CWD}/ppt/slideMasters/_rels/
-IMAGES=()
-NewImagesDIR=../NewImages
-
-cd $NewImagesDIR
-
-NewImages=( *.* )
-
-for FILE in "${NewImages[@]}"
-do
-        if [[ "$FILE" =~ "STD"  ]]; then
-        
-            if [[ "$FILE" =~ "Alt1"  ]]; then
-             cp "$FILE" "$IDIR/image4.jpg"
-            fi
-            if [[ "$FILE" =~ "Alt2"  ]]; then
-             cp "$FILE" "$IDIR/image5.jpg"
-            fi
-            if [[ "$FILE" =~ "TT1"  ]]; then
-             cp "$FILE" "$IDIR/image1.jpg"
-            fi
-            if [[ "$FILE" =~ "TT2"  ]]; then
-             cp "$FILE" "$IDIR/image2.jpg"
-            fi
-            if [[ "$FILE" =~ "TT3"  ]]; then
-             cp "$FILE" "$IDIR/image3.jpg"
-            fi
-        fi
-done

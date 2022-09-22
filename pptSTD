@@ -30,7 +30,7 @@ echo
 # Unzip the input file and move it out of the folder
 for FILENAME in ${FILES[@]}
 do
-    unzip -q $FILENAME
+    unzip -q -o $FILENAME
     mv $FILENAME ..
     echo "$FILENAME was unzipped and moved."
     echo
