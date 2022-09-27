@@ -17,6 +17,7 @@ WIDE=()
 STD=()
 MAINDIR="$(dirname "$(pwd)")"
 CWD=$PWD
+#CWD="${theDIR}"
 IDIR=${CWD}/ppt/media
 RELSDIR=${CWD}/ppt/slideLayouts/_rels
 MASTER_RELS=${CWD}/ppt/slideMasters/_rels/
