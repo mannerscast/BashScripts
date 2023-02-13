@@ -30,7 +30,7 @@ do
     theFile="$UPLOAD""/$(basename "$HDFILES" .mov).mp4"
     theMPEG="$UPLOAD""/$(basename "$HDFILES" .mov).mpg"
     
-    ffmpeg -y -i "$HDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" -vf "scale=iw*.66666667:ih*.66666667" -pix_fmt yuv420p -b:v 8500k -minrate 8500k -maxrate 10500k -bufsize 25000k "$theMPEG"
+    ffmpeg -y -i "$HDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" -vf "scale=iw*.66666667:ih*.66666667" -c:v mpeg1video -b:v 6500k "$theMPEG"
 done
 
 for SDFILES in ${SD[@]}
@@ -39,6 +39,7 @@ do
     theMPEG="$UPLOAD""/$(basename "$SDFILES" .mov).mpg"
     
     ffmpeg -y -i "$SDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" -vf "scale=640:480" -pix_fmt yuv420p -b:v 4500k -minrate 4500k -maxrate 8500k -bufsize 15000k "$theMPEG"
+    
 done
 
 # Open the ecnlosing folder

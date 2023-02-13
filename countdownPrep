@@ -3,16 +3,16 @@
 FILENAME=${1?Error: no file given}
 CD=()
 
-if [[ "$FILENAME" =~ "Countdown"  ]]; then
+if [[ "$FILENAME" =~ "countdown"  ]]; then
     CD+=("$FILENAME")
 else
     echo "This file is not a Countdown."
 fi
-CD_NAME=${CD/HD.mov/}
-CD_HD=${CD_NAME}HD.mov
-CD_SD=${CD_NAME}SD.mov
+CD_NAME="${CD/HD.mov/}"
+CD_HD="${CD_NAME}HD.mov"
+CD_SD="${CD_NAME}SD.mov"
 CD_CONVERT=($CD_HD $CD_SD)
-open $CD_HD
+open "$CD_HD"
 
 read -p "Press enter after choosing the thumbnail frame." answer
 

@@ -4,7 +4,7 @@ THEFILES=( "$@" )
 
 #Open the first file in QuickTime and pasue for USER to choose thumbnail time
 FIRSTFILE="${THEFILES[0]}" 
-open $FIRSTFILE
+open "$FIRSTFILE"
 
 read -p "Press enter after choosing the thumbnail frame." answer
 
