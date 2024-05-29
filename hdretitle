@@ -2,10 +2,19 @@
 
 # This is a script for encoding Motion Retitles.
 
-UPLOAD="$PWD/../Uploads"
+FILES=( "$@" )
+if [ ${#FILES[@]} -eq 0 ]; then
+    echo "Error: no files given"
+    exit 1
+fi
+
+# Get the directory of the first file provided
+FILE_DIR="$(dirname "${FILES[0]}")"
+PARENT_DIR="$(dirname "$FILE_DIR")"
+UPLOAD="$PARENT_DIR/Uploads"
+
 HD=()
 SD=()
-FILES=( "$@" )
 
 # Create the Uploads directory if it doesn't exist
 mkdir -p "$UPLOAD"
@@ -44,6 +53,6 @@ do
 done
 
 # Open the enclosing folder
-if [[ -n "${FILES[0]}" ]]; then
+if [[ -n "$UPLOAD" ]]; then
     open -R "$UPLOAD"
 fi
