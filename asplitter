@@ -49,7 +49,7 @@ for (( j=0; j<=$(( $total -1 )); j++ ))
         #echo -n "End: $e "
         new_duration=`echo $e - $s | bc -l`
         #echo "Duration= $new_duration"
-        ffmpeg -loglevel quiet -y -ss $s -i "$IN" -t $new_duration -c copy -map 0 $(basename "$IN" .m4a)-$j.m4a
+        ffmpeg -loglevel quiet -y -ss $s -i "$IN" -t $new_duration -c copy -map 0 $(basename "$IN" .wav)-$j.wav
         echo -n "#"
         done
 echo
