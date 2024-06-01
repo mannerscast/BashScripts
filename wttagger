@@ -1,17 +1,14 @@
 #!/bin/bash
 
 IN=( "$@" )
-# TAG=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
 
-default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Igniter-Tag.mov"
+default_tag=$"/Users/trentarmstrong/Desktop/_Current_Igniter_Projects/1-Mini_Movie_Tag/Assets/Worship_Together_Tag_HD.mov"
 
-read -p "Logo tag to use [Default is Igniter Logo] > " TAG
+read -p "Logo tag to use [Default is Worship Together Logo] > " TAG
 
 TAG=${TAG:-$default_tag}
 NO_AUDIO=()
 WRONG_SIZE=()
-
-OUTPUT="../_Tagged""/$(basename "$1" .mp4)-tagged.mov"
 
 echo
 echo "Checking for audio..." 
@@ -49,10 +46,10 @@ echo
 
 for (( i=0; i<=$(( $total -1 )); i++ ))  
     do  
-        OUTPUT="../Tagged_Movies""/$(basename "${movie[i]}" .mov)-tagged.mov"
+        OUTPUT="../_Tagged""/$(basename "${movie[i]}" .mov)-tagged.mov"
         echo "Processing ..." ${movie[i]}
         # -loglevel quiet
-        ffmpeg -loglevel quiet -y -i ${movie[i]} -i ${endcard} -dn -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
+        ffmpeg -y -i ${movie[i]} -i ${endcard} -dn -filter_complex '[0:v]scale=1920:1080,setsar=1[in1];[1:v]scale=1920:1080,setsar=1[in2];[in1][0:a:0][in2][1:a:0]concat=n=2:v=1:a=1 [v][a]' -map '[v]' -map '[a]' -c:v libx264 -pix_fmt yuv420p $OUTPUT
         echo "Complete:" $OUTPUT
         # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 ${movie[0]}
     done
@@ -63,6 +60,9 @@ echo
 
 echo "FAILED: "${NO_AUDIO[@]}
 echo
+
+# ALERT CODE
+# osascript -e 'tell app "System Events" to display dialog "FAILED: ${NO_AUDIO[@]}"'
 
 # FFPROBE Check for audio stream
 # ffprobe -v error -of flat=s_ -select_streams 1 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1

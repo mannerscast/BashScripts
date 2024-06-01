@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+FILES=( "$@" )
+OS=$(uname)
+userName=$(whoami)
+scriptPath="/Users/$userName/Documents/Github/BashScripts/"
+
+theDIR="$(dirname "$1")"
+cd "$theDIR"
+#open "$theDIR"
+
+bash ${scriptPath}pptWIDE "$FILES"

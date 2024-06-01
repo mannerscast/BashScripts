@@ -2,8 +2,10 @@
 
 # This script slices audio into separate files based on silent place in the audio file.
 ##      TODO:
-##      Add option for any audio file that maintains the file extension.
-##      Remove initial empty audio file generated.
+##      • Add option for any audio file that maintains the file extension.
+##      • Remove initial empty audio file generated.
+##      • Remove any files that are only short pieces of silence
+##      • Code for editing clips after locating IN/OUT with ffprobe
 
 IN=$1
 OUT=$(basename "$IN" .wav)%03d.wav
@@ -55,4 +57,3 @@ for (( j=0; j<=$(( $total -1 )); j++ ))
 echo
 echo
 echo "Audio has been split!"
-
