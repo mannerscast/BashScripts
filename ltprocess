@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Store the current directory
+CURRENT_DIR=$(pwd)
+
+# Find a movie file that includes 'Lower_Third'
+MOVIE_FILE=$(find "$CURRENT_DIR" -maxdepth 1 -type f -name "*Lower_Third*.mov" | head -n 1)
+
+# Check if a movie file was found
+if [[ -z "$MOVIE_FILE" ]]; then
+    echo "No movie file found with 'Lower_Third' in its name."
+    exit 1
+fi
+
+# Extract the basename without the extension
+BASENAME=$(basename "$MOVIE_FILE" .mov)
+
+# Define the path to the JPEG background using a standard home directory path
+BACKGROUND_IMAGE="$HOME/Desktop/Photoshop Action Assets/light transparency grid.jpg"
+
+# Use the dynamically found movie file to generate an output video with transparency grid overlay
+ffmpeg -i "$MOVIE_FILE" -loop 1 -i "$BACKGROUND_IMAGE" \
+-filter_complex "[1:v]scale=1920x1080[bg]; [0:v]format=yuva420p,setpts=PTS-STARTPTS[fg]; [bg][fg]overlay=shortest=1:eof_action=pass,format=yuv420p" \
+-c:v libx264 -profile:v high -level:v 4.2 -pix_fmt yuv420p -crf 18 -g 30 -bf 2 -movflags +faststart -s 1920x1080 "${BASENAME}.mp4"
+
+echo "Output generated: ${BASENAME}.mp4"
