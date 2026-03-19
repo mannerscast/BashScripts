@@ -26,13 +26,13 @@ for FILENAME in "${FILES[@]}"; do
         # If "UW_HD" is found, apply scaling and cropping, and transcode with prores
         OUTPUT_FILENAME="${FILENAME/HD/SD}"  # Replace "HD" with "SD"
         ffmpeg -i "$FILENAME" -filter_complex "scale=2560:480,crop=1920:480:exact=true" -c:v prores -profile:v 2 -pix_fmt yuv422p10le "$OUTPUT_FILENAME"
-    elif [[ "$FILENAME" == *"HD"* ]]; then
+    elif [[ "$FILENAME" == *"4K"* ]]; then
         # If "HD" is found, apply 4/3 crop and transcode with prores
-        OUTPUT_FILENAME="${FILENAME/HD/SD}"  # Replace "HD" with "SD"
-        ffmpeg -i "$FILENAME" -filter:v "crop=in_w/(4/3):in_h" -c:v prores -profile:v 2 -pix_fmt yuv422p10le "$OUTPUT_FILENAME"
+        OUTPUT_FILENAME="${FILENAME/4K/SD}"  # Replace "4K" with "SD"
+        ffmpeg -i "$FILENAME" -filter:v "crop=in_w/(4/3):in_h" -s 1440x1080 -c:v prores -profile:v 2 -pix_fmt yuv422p10le "$OUTPUT_FILENAME"
     else
-        # If neither "UW_HD" nor "HD" is found, skip the file
-        echo "Skipping $FILENAME: Neither HD nor UW_HD found in the name."
+        # If neither "UW_HD" nor "4K" is found, skip the file
+        echo "Skipping $FILENAME: Neither 4K nor UW_HD found in the name."
     fi
 
     # Print additional information if needed

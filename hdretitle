@@ -37,8 +37,13 @@ do
     theFile="$UPLOAD/$base_name.mp4"
     theMPEG="$UPLOAD/$base_name.mpg"
     
-    ffmpeg -y -i "$HDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" \
-        -vf "scale=iw*0.66666667:ih*0.66666667" -c:v mpeg1video -b:v 6500k "$theMPEG"
+    ffmpeg -y -i "$HDFILES" -map 0:v:0 -map_chapters -1 -dn \
+        -s 1920x1080 -c:v libx264 -pix_fmt yuv420p "$theFile"
+
+    ffmpeg -y -i "$HDFILES" -map 0:v:0 -map_chapters -1 -dn \
+    -s 1280x720 -c:v mpeg1video -pix_fmt yuv420p \
+    -b:v 6500k -minrate 6500k -maxrate 6500k -bufsize 15000k \
+    "$theMPEG"
 done
 
 # Encode SD files
@@ -48,8 +53,11 @@ do
     theFile="$UPLOAD/$base_name.mp4"
     theMPEG="$UPLOAD/$base_name.mpg"
     
-    ffmpeg -y -i "$SDFILES" -c:v libx264 -pix_fmt yuv420p "$theFile" \
-        -vf "scale=640:480" -b:v 4500k -minrate 4500k -maxrate 8500k -bufsize 15000k "$theMPEG"
+    ffmpeg -y -i "$SDFILES" -map 0:v:0 -map_chapters -1 -dn \
+        -c:v libx264 -pix_fmt yuv420p "$theFile"
+
+    ffmpeg -y -i "$SDFILES" -map 0:v:0 -map_chapters -1 -dn \
+        -vf "scale=640:480" -c:v mpeg1video -pix_fmt yuv420p -b:v 4500k -minrate 4500k -maxrate 8500k -bufsize 15000k "$theMPEG"
 done
 
 # Open the enclosing folder
